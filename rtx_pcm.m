@@ -49,7 +49,6 @@ x_qtz = round(x_desl2);
 x_bin = de2bi(x_qtz); % vai gerar uma matriz
 [x, y] = size(x_bin);
 % Fim da quantizacao
-
 %% Processo de compressao
 i = 1;
 x_c = [];
@@ -59,7 +58,7 @@ while i <= x
   while cont <= 8
     if x_bin(i,cont:cont) == 1
       if flag == 1
-        j = cont;
+        j = cont
         flag = 0;
       end
     end
@@ -69,29 +68,29 @@ while i <= x
   if flag == 0
     if j == 2
       s = [1 1 1];
-      comp = [x_bin(i,1:1) s x_bin(i,j+1:6)];
+      comp = [x_bin(i) s x_bin(i,j+1:6)];
     elseif j == 3
       s = [1 1 0];
-      comp = [x_bin(i,1:1) s x_bin(i,j+1:7)]; 
+      comp = [x_bin(i) s x_bin(i,j+1:7)]; 
     elseif j == 4
       s = [1 0 1];
-      comp = [x_bin(i,1:1) s x_bin(i,j+1:8)];
+      comp = [x_bin(i) s x_bin(i,j+1:8)];
     elseif j == 5
       s = [1 0 0];
-      comp = [x_bin(i,1:1) s x_bin(i,j+1:9)];
+      comp = [x_bin(i) s x_bin(i,j+1:9)];
     elseif j == 6
       s = [0 1 1];
-      comp = [x_bin(i,1:1) s x_bin(i,j+1:10)];
+      comp = [x_bin(i) s x_bin(i,j+1:10)];
     elseif j == 7
       s = [0 1 0];
-      comp = [x_bin(i,1:1) s x_bin(i,j+1:11)];
+      comp = [x_bin(i) s x_bin(i,j+1:11)];
     elseif j == 8
       s = [0 0 1];
-      comp = [x_bin(i,1:1) s x_bin(i,j+1:12)];
+      comp = [x_bin(i) s x_bin(i,j+1:12)];
     end
     else
       s = [0 0 0];
-      comp = [x_bin(i,1:1) s x_bin(i,9:12)];
+      comp = [x_bin(i) s x_bin(i,9:12)];
   end
   i = i + 1;
   x_c = [x_c; comp];
