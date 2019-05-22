@@ -58,7 +58,7 @@ while i <= x
   while cont <= 8
     if x_bin(i,cont:cont) == 1
       if flag == 1
-        j = cont
+        j = cont;
         flag = 0;
       end
     end
@@ -160,7 +160,7 @@ end
 xdec = bi2de(x_exp); % ou xdec = bi2de(transpose(xdec_qtz1)) 
 xdec_passo = xdec * passo;
 xdec_rec = xdec_passo - ((Vpp/2) - (passo/2));
-f_PB = fir1(50, 10e3/Fs);
+f_PB = fir1(50, 3.4e3/Fs);
 yy = conv(f_PB, xdec_rec);
 %plot(yy);
 %sound(yy, Fs)
