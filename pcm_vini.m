@@ -2,8 +2,8 @@ clear all;
 close all;
 clc;
 %%
-pkg load signal
-pkg load communications
+%pkg load signal
+%pkg load communications
 Vpp = 2; % escala de tensao
 k = 13; % quantidade de bits do quantizador
 
@@ -38,6 +38,20 @@ negativos = x_quant < 0; % guarda valores negativos
 [linhas, colunas] = size(negativos);
 x_quant = abs(x_quant); % deixa positivo para executar o de2bi
 x_bin_1 = de2bi(x_quant, 13, 'left-msb');
+
+% Observando o sinal transmitido
+figure(2)
+[x, y] = size(x_bin_1);
+x_bin_linha = reshape(transpose(x_bin_1), 1, x*y); % Para colocar tudo em uma unica linha 
+subplot(311)
+filtro_NRZ = ones(1, 100); % filtro
+%tx = filter(filtro_NRZ, 1, x_bin_linha);
+tx = filter(filtro_NRZ, 1, upsample(x_bin_linha, 100));
+plot(tx);
+ylim([-0.5 2])
+xlim([2.3e6 2.31e6])
+title('Transmissão do sinal original 13 bits')
+
 
 % Loop que recupera os valores que eram negativos
 i = 1;
@@ -102,6 +116,15 @@ end
 [linha_comp, coluna_comp] = size(x_comp);
 x_send = reshape(transpose(x_comp), 1, linha_comp*coluna_comp);
 
+%Visualizando o Sinal
+subplot(312)
+tx_send = filter(filtro_NRZ, 1, upsample(x_send, 100));
+plot(tx_send);
+ylim([-0.5 2])
+xlim([2.3e6 2.31e6])
+title('Transmissão do sinal Comprimido 8 bits')
+
+
 %% Descompressao
 x_rec = transpose(reshape(x_send, coluna_comp, linha_comp));
 x_expand = zeros(linha_comp, 13);
@@ -136,6 +159,15 @@ while i<=linha_comp
     i = i + 1;
 end
 
+subplot(313)
+[x, y] = size(x_expand);
+rx_bin_linha = reshape(transpose(x_expand), 1, x*y); % Para colocar tudo em uma unica linha 
+rx_exp = filter(filtro_NRZ, 1, upsample(rx_bin_linha, 100));
+plot(rx_exp);
+ylim([-0.5 2])
+xlim([2.3e6 2.31e6])
+title('Transmissão do sinal expandido 13 bits')
+
 %% Recupera valores "originais"
 x_dec_1 = bi2de(x_expand(:,2:13), 'left-msb'); % bi2de apenas unsigned
 
@@ -159,7 +191,7 @@ y_fft = fftshift(fft(y_n)/length(y_n));
 
 
 figure(2)
-suptitle(['Quantização de ',num2str(k),' bits'])
+subtitle(['Quantização de ',num2str(k),' bits'])
 subplot(221)
 plot(t, x_n_rec)
 title('Áudio no tempo')
